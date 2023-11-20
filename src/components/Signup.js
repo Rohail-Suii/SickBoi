@@ -2,7 +2,7 @@
 import { React, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {Link} from 'react-router-dom';
-
+import axios from 'axios';
 // importing css
 import '../css/signup.css';
 
@@ -20,7 +20,21 @@ const Signup = () => {
   const [registerEmail, setregisterEmail] = useState("");
   const [registerPassword, setregisterPassword] = useState("");
 
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/users/signup', {
+        username: registerFullName,
+        email: registerEmail,
+        password: registerPassword
+      });
 
+      // Handle successful signup, e.g., redirect or show a success message
+      console.log('Signup successful:', response.data);
+    } catch (error) {
+      console.error('Signup failed:', error.response.data.message);
+      // Handle failed signup, e.g., show an error message
+    }
+  };
   
 
   return (
@@ -49,7 +63,7 @@ const Signup = () => {
             }
           }} />
           <input placeholder='Confirm Password' className='signup_inputs' name='confirm_password' />
-          <button className='submit_details_btn'>Sign up</button>
+          <button onClick={handleSignup} className='submit_details_btn'>Sign up</button>
         </div>
       </div>
       <div className='right_signup'>
